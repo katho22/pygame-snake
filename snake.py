@@ -30,7 +30,7 @@ DIRECTION_DOWN = (0, 1)
 # Background color of the snake grid.
 COLOR_BACKGROUND = (0, 0, 0)  # rgb color for black
 # This is the color of the snake's head. 
-COLOR_SNAKE_HEAD = (107, 165, 219)      # rgb color for blue
+COLOR_SNAKE_HEAD = (151, 43, 146)      # rgb color for purple
 # This is the color of the rest of the snake.
 COLOR_SNAKE = (107, 165, 219)           # rgb color for blue
 # This is the color for the snake's food.
@@ -59,7 +59,9 @@ def create_food_position():
     The first element is the x position. Must be an int between 0 and GRID_WIDTH - 1, inclusively.
     The second element is the y position. Must be an int between 0 and GRID_HEIGHT - 1, inclusively.
     """
-    return
+    x_position = random.randint(0, (GRID_WIDTH - 1))
+    y_position = random.randint(0, (GRID_HEIGHT - 1))
+    return (x_position, y_position)
 
 def snake_ate_food(snake, food):
     """Returns whether food was eaten by the snake.
