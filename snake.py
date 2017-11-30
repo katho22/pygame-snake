@@ -69,14 +69,27 @@ def snake_ate_food(snake, food):
     food - 2-tuple representing the position in the grid of the food
     This function should return True if the head of the snake is in the same position as food.
     """
+    if snake[0] == food:
+        return True
     return False
+
 
 def snake_ran_out_of_bounds(snake):
     """Returns whether the snake has ran off one of the four edges of the grid.
     snake - list of 2-tuples representing the positions of each snake segment
     Note that the grid is GRID_WIDTH cells wide and GRID_HEIGHT cells high.
     """
+    for number in range(0, GRID_HEIGHT):
+        if snake[0] == (number, GRID_WIDTH):
+            return True
+        if snake[0] == (GRID_WIDTH, number):
+            return True
+        if snake[0] == (-1, number):
+            return True
+        if snake[0] == (number, -1):
+            return True
     return False
+
 
 def snake_intersected_body(snake):
     """Returns whether the snake has ran into itself.
@@ -84,6 +97,12 @@ def snake_intersected_body(snake):
     The snake ran into itself if the position of the head is the same as the position
     of any of its body segments.
     """
+    unique_tuple = []
+    for tuple in snake:
+         if tuple not in unique_tuple:
+             unique_tuple.append(tuple)
+         else:
+             return True
     return False
 
 def get_score(snake):
@@ -92,14 +111,14 @@ def get_score(snake):
     The user earns 10 points for each of the segments in the snake.
     For example, if the snake has 25 segments, the score is 250.
     """
-    return 0
+    return len(snake) *  10
 
 def get_game_over_text(score):
     """Returns the text to draw on the screen after the game is over.
     This text should contain 'Game Over' as well as the score.
     score - integer representing the current score of the game.
     """
-    return 'Game Over.'
+    return 'Game Over. Score: ' + str(score)
 
 def get_snake_speed(snake):
     """Return the number of cells the snake should travel in one second.
