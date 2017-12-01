@@ -132,7 +132,9 @@ def get_snake_speed(snake):
     snake - list of 2-tuples representing the positions of each snake segment
     The speed at the beginning of the game should be 5. Once the snake has eaten 10 pieces of food,
     the speed of the game should increase (by how much is up to you).
-    """
+    """  
+    if len(snake) >= 15:
+        return len(snake) - 5 
     return 5
 
 def move_snake(snake, direction, food):
