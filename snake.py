@@ -61,14 +61,19 @@ def get_direction(previous_direction, event_key):
     elif event_key == pygame.K_RIGHT:
         return DIRECTION_RIGHT
 
-def create_food_position():
+def create_food_position(snake):
     """Returns a random 2-tuple in the grid where the food should be located.
     The first element is the x position. Must be an int between 0 and GRID_WIDTH - 1, inclusively.
     The second element is the y position. Must be an int between 0 and GRID_HEIGHT - 1, inclusively.
     """
     x_position = random.randint(0, (GRID_WIDTH - 1))
     y_position = random.randint(0, (GRID_HEIGHT - 1))
-    return (x_position, y_position)
+    if (x_position, y_position) not in snake:
+        return (x_position, y_position)
+    else:
+        return (random.randint(0, (GRID_WIDTH - 1)), random.randint(0, (GRID_HEIGHT - 1)))
+        
+        
 
 def snake_ate_food(snake, food):
     """Returns whether food was eaten by the snake.
@@ -132,7 +137,8 @@ def get_snake_speed(snake):
     snake - list of 2-tuples representing the positions of each snake segment
     The speed at the beginning of the game should be 5. Once the snake has eaten 10 pieces of food,
     the speed of the game should increase (by how much is up to you).
-    """  
+    """
+    
     if len(snake) >= 15:
         return len(snake) - 5 
     return 5
@@ -227,6 +233,8 @@ def process_events(direction, game_over):
     for event in pygame.event.get():
         # Quit the program when the user presses the x in the corner of the window.
         if event.type == pygame.QUIT:
+            pygame.display.quit()
+            pygame.quit()
             sys.exit()
         # Process events when the user presses a key on the keyboard.
         # https://www.pygame.org/docs/ref/key.html
@@ -250,13 +258,13 @@ def start_game():
     pygame.display.set_caption('Snake')
     # This clock is used to ensure that the game progresses at the right speed.
     clock = pygame.time.Clock()
-
+    snake = get_initial_snake()
     # The snake starts out traveling in the right direction.
     direction = DIRECTION_RIGHT
     # The 2-tuple representing the position of the food in the grid.
-    food = create_food_position() 
+    food = create_food_position(snake) 
     # The list of 2-tuples that make up the snake. The first element in the list is the snake's head.
-    snake = get_initial_snake()
+    
     # Tracks whether the game is over. When the game is over the user can press the space bar to restart.
     game_over = False
 
@@ -268,7 +276,7 @@ def start_game():
         if should_reset_game:
             # Reset all game state if the space bar is pressed after the game is over.
             direction = DIRECTION_RIGHT
-            food = create_food_position()
+            food = create_food_position(snake)
             snake = get_initial_snake()
             game_over = False
 
@@ -280,7 +288,7 @@ def start_game():
             game_over = snake_intersected_body(snake) or snake_ran_out_of_bounds(snake)
             if not game_over and ate_food:
                 # Move the food if the snake just ate it.
-                food = create_food_position()
+                food = create_food_position(snake)
 
         # Draw the snake, food, and optionally game over message to the screen.
         draw_screen(screen, snake, food, game_over)
